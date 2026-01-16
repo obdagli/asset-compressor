@@ -1,117 +1,68 @@
 # Asset Compressor
 
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
-![Code Style](https://img.shields.io/badge/Style-Rich_CLI-purple?style=for-the-badge)
+A multi-threaded Python utility designed to optimize website assets for production. It uses industry-standard compression algorithms to reduce file sizes while maintaining visual quality.
 
-> **Optimize web assets in seconds. Serve faster sites.**
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=flat)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat)
 
-A production-grade, multi-threaded asset optimization engine designed for modern web development. It recursively scans your project, intelligently compresses media into next-gen formats (WebP, H.264), and creates server-ready static assets (Brotli/Gzip) — all while automatically updating your HTML/CSS references.
+## Overview
 
----
+This tool recursively scans a project directory, compresses images and videos into next-generation formats, and generates pre-compressed text assets for server-side delivery. It is designed for CI/CD pipelines and local development workflows.
 
-## ⚡ Sample Run
+## Key Features
 
-Experience a clean, interactive CLI that respects your time.
+*   **Multi-threaded Processing**: Uses concurrent execution to process assets in parallel.
+*   **Smart Filtering**: Automatically ignores system directories (node_modules, venv, .git).
+*   **Image Optimization**: Converts PNG and JPEG images to WebP format (Quality 75).
+*   **Video Optimization**: Re-encodes MP4 videos to H.264 (CRF 26) with optimized presets.
+*   **Text Compression**: Generates Brotli (.br) and Gzip (.gz) versions of HTML, CSS, and JS files.
+*   **Reference Updating**: Automatically updates file references in source code to point to the new optimized assets.
+*   **Idempotency**: Skips files that have already been optimized to prevent processing loops.
 
-```text
-$ python compressor.py
+## Installation
 
-   High-Performance Asset Compressor
-   Optimize Images, Videos, and Code
-
-? Main Menu: 1. Compress Assets (Images, Video, Code)
-? Select target type: Specific Folder
-? Enter folder path: ./my-website/assets
-
-Processing 42 files...
-[████████████████████████████████████████] 100%
-
-COMPRESSION REPORT
-File                           | Old Size   | New Size   | Reduction 
-----------------------------------------------------------------------
-hero-background.png            | 2.09 MB    | 0.23 MB    | 88.9%
-marketing-banner.png           | 1.11 MB    | 0.04 MB    | 96.7%
-demo-reel.mp4                  | 13.71 MB   | 12.84 MB   | 6.4%
-app.js                         | 0.45 MB    | 0.12 MB    | 73.2%
-----------------------------------------------------------------------
-Total Space Saved: 16.80 MB
-
-Updated references in 3 code files.
-```
-
----
-
-## 📊 Real-World Benchmarks
-
-Tested on a production restaurant website. The results speak for themselves:
-
-| Asset Type | Input Format | Output Format | Size Reduction | Quality Loss |
-|:-----------|:-------------|:--------------|:---------------|:-------------|
-| **Photography** | High-Res PNG | **WebP (Q75)** | **~90-97%** | Negligible |
-| **Video** | Unoptimized MP4 | **H.264 (CRF 26)** | **~10-20%** | None (Visual) |
-| **Graphics** | Logo PNG | **WebP Lossless** | **~25%** | Zero |
-
-> **Result:** Largest Contentful Paint (LCP) dropped from **4.2s** to **0.8s**.
-
----
-
-## 🔥 Key Features
-
-*   **Smart Automation**: Automatically ignores `node_modules`, `.git`, and `venv` to prevent useless scanning.
-*   **Safety First**: Never overwrites your source files. Creates optimized copies (e.g., `image.webp`) alongside originals.
-*   **Idempotent**: Detects already-optimized files and skips them to prevent quality degradation.
-*   **Code Aware**: Automatically finds references in your `html`, `css`, and `js` files and updates them to point to the new, lighter assets.
-*   **Server Ready**: Generates `.br` (Brotli) and `.gz` (Gzip) pre-compressed files for Nginx/Apache/Netlify.
-
----
-
-## 🛠️ Installation
-
-Requires **Python 3.10+**.
+Requires Python 3.10 or higher.
 
 ```bash
-# Clone the repository
-git clone https://github.com/obdagli/asset-compressor.git
-cd asset-compressor
-
-# Install dependencies
-pip install -r requirements.txt
-# OR manually:
 pip install Pillow moviepy brotli tqdm questionary rich
 ```
 
-## 🚀 Usage
+## Usage
 
-### Interactive Mode (Recommended)
-Just run the script. The wizard will guide you.
+### Interactive Mode
+Run the script without arguments to start the interactive wizard:
+
 ```bash
 python compressor.py
 ```
 
-### Automation / CI Mode
-Integrate into your build pipeline using flags.
+### CLI Mode
+Run with arguments for batch processing or automation:
+
 ```bash
 # Compress directory
 python compressor.py -i ./src/assets
 
-# Decompress static files (debugging)
+# Decompress specific file
 python compressor.py -i ./dist/index.html.gz -d
 ```
 
----
+## Technical Specifications
 
-## ⚙️ Configuration
+| Asset Type | Input Format | Output Format | Settings |
+|:-----------|:-------------|:--------------|:---------|
+| Image | PNG, JPEG | WebP | Quality: 75, Method: 6 |
+| Video | MP4 | H.264 (MP4) | CRF: 26, Preset: Medium |
+| Text | HTML, CSS, JS | Brotli, Gzip | Standard Compression |
 
-Tweak the top of `compressor.py` to match your needs:
+## Benchmarks
 
-```python
-MAX_WIDTH = 1920        # Downscale 4K images/video to 1080p
-WEBP_QUALITY = 75       # Balance between size and clarity
-VIDEO_CRF = 26          # Higher = Smaller File, Lower = Better Quality
-```
+Tested on production assets:
 
----
+*   **Images**: ~90% reduction (High-Res PNG to WebP).
+*   **Videos**: ~10-20% reduction (Re-encoding).
+*   **Total Savings**: 12.01 MB reduced on the sample project.
 
-**License**: MIT  
-**Author**: Built for high-performance web engineering.
+## License
+
+MIT License
